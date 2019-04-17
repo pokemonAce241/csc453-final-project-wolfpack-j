@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.6/Tone.min.js"></script>
+    <link rel="stylesheet" href="styles/styles.css" />
+    <script async src="./javascript/javascript.js"></script>
+    <title>My webpage!</title>
+  </head>
+  <body>
+    <h1>Hello Chords!</h1>
+    <div>
+      <button class="button button0" onclick="pause()">Pause</button>
+      <button class="button button1" onclick="play()">Play</button>
+      <button class="button button2" onclick="mute()">Mute</button>
+    </div>
+    <br />
+    <br />
+    <div class="slidecontainer">
+      <label class="container"
+        >Make Funky
+        <input type="checkbox" id="makeFunky" onclick="makeFunky()" />
+        <span class="checkmark"></span>
+      </label>
+      Volume:
+      <span id="volumeValue"></span>
+      <input
+        type="range"
+        min="-20"
+        max="20"
+        value="0"
+        class="slider"
+        name="volumeSlider"
+        id="volumeSlider"
+      />
+    </div>
+    <br />
+    <br />
+    <hr size="10" width="90%" align="center" color="black" />
+    <br />
+    <br/ >
+    <div>
+      <label class="container">
+        Toggle Temperature
+        <input type="checkbox" id="muteTemp" onclick="toggleTemp()" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container">
+        Toggle Light
+        <input
+          type="checkbox"
+          checked="checked"
+          id="muteLight"
+          onclick="toggleLight()"
+        />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">
+        Toggle Humidity Kick
+        <input
+          type="checkbox"
+          id="muteHumidityKick"
+          onclick="toggleHumidityKick()"
+        />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">
+        Toggle Humidity Snare
+        <input
+          type="checkbox"
+          id="muteHumiditySnare"
+          onclick="toggleHumiditySnare()"
+        />
+        <span class="checkmark"></span>
+      </label>
+      <br />
+      <br />
+      <br />
+      <label class="container"
+        >Toggle Motion-X
+        <input type="checkbox" id="muteMotionX" onclick="toggleMotionX()" />
+        <span class="checkmark"></span>
+      </label>
+      <br />
+      <br />
+      <br />
+      <div>
+        <br />
+        Temperature Change:
+        <span id="pingPongDelayValue"></span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.1"
+          class="slider"
+          id="pingPongDelaySlider"
+        />
+        <br />
+      </div>
+    </div>
+  </body>
+</html>
