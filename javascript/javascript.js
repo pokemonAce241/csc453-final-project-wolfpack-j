@@ -439,12 +439,14 @@ function changeHumidity(value) {}
 
 // Value is some value between 0 - 1
 function changeTemperature(value) {
-  console.log(value);
-  bitCrusher.wet.value = this.value / 2;
-  pingPongDelay.wet.value = this.value;
+  v = value * 100.0;
+  v = Math.round(v) / 100.0;
+  console.log(v);
+  bitCrusher.wet.value = v / 2;
+  pingPongDelay.wet.value = v;
 
-  tremolo.frequency.value = this.value * 20;
-  if (this.value * 20 > 1) {
+  tremolo.frequency.value = v * 20;
+  if (v * 20 > 1) {
     tremolo.wet.value = 1;
   } else {
     tremolo.wet.value = 0;
@@ -454,3 +456,13 @@ function changeTemperature(value) {
 function changeLight() {}
 
 function changeMotion() {}
+
+//Gets called whenever you receive a message for your subscriptions
+client.onMessageArrived = function (message) {
+  console.log(message);
+  payload = JSON.parse(message.payloadString); // {temp: 0.76}
+  temp = payload.temp;
+  console.log(temp);
+  changeTemperature(temp);
+  // every other function here
+};
