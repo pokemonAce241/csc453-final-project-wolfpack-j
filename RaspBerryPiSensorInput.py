@@ -46,19 +46,6 @@ def main():
     sensor = mpu6050(0x68)
     sensor2 = Adafruit_DHT.DHT11
     
-    # create the spi bus
-    spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
-
-    # create the cs (chip select)
-    cs = digitalio.DigitalInOut(board.D5)
-
-    # create the mcp object
-    mcp = MCP.MCP3008(spi, cs)
-
-    # create analog channels for the LDR and potentiometer
-    ldr = AnalogIn(mcp, MCP.P0)
-    #pot = AnalogIn(mcp, MCP.P1)
-
     last_ldr_val = 0.0
     last_pot_val = 0.0
     
@@ -66,12 +53,13 @@ def main():
         options = {
             "org": "dk8so0",
             "id": "the-raspberry-pi",
-            "auth-method": "use-token-auth",
+            "auth-method": "apikey",
             "auth-key": "a-dk8so0-ezy9ezvriv",
-            "auth-token": "7rb_hNq_I58rdDa5ZV"
+            "auth-token": "7rb_hNq_l58rdDa5ZV"
         }
-
+        
         client = ibmiotf.application.Client(options)
+        print('s')
         client.connect()
         print("Connected to IBM Cloud!!")
 
@@ -84,7 +72,20 @@ def main():
 def loop():
     global sensor
     global sensor2
-    global ldr
+    #global ldr
+    
+    # create the spi bus
+    spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+
+    # create the cs (chip select)
+    cs = digitalio.DigitalInOut(board.D5)
+
+    # create the mcp object
+    mcp = MCP.MCP3008(spi, cs)
+
+    # create analog channels for the LDR and potentiometer
+    ldr = AnalogIn(mcp, MCP.P0)
+    #pot = AnalogIn(mcp, MCP.P1)
     while True:
         ldr_val = (ldr.value - ldr_min)/(ldr_max - ldr_min)
         a = sensor.get_accel_data() # get the acceleration data
@@ -93,16 +94,17 @@ def loop():
         a_z = (a['z'] - accel_min)/(accel_max - accel_min)
         g = sensor.get_gyro_data() # get the gyro data
         h, t = Adafruit_DHT.read_retry(sensor2,21)
-        myData = {'gyro' : [g['x'], g['y'], g['z']],
-                  'Accel' : [a_x, a_y, a_z],
+        myData = {'Gyro' : [g['x'], g['y'], g['z']],
+                  'Motion' : [a_x, a_y, a_z],
                   'Light' :ldr_val,
                   'Temp' : t,
-                  'Humidity' : h}   
-        client.publishEvent("RaspberryPi", "therpi", "musicSensorData", "json", myData, 2)
+                  'Humidity' : h}
+        print(myData)
+        client.publishEvent("RaspberryPi", "the-raspberry-pi", "musicSensorData", "json", myData, 2)
 #        print(ldr_val)
 #        print(a)
 #        print(g)
-        time.sleep(1.0)
+        time.sleep(0.1)
 
 def clean_up():
     global client
