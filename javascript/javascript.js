@@ -14,6 +14,15 @@ var volumeOutput = document.getElementById("volumeValue");
 // References the Light Volume value
 var pingPongDelaySlider = document.getElementById("pingPongDelaySlider");
 var pingPongDelayValueOutput = document.getElementById("pingPongDelayValue");
+// References the Motion x, y, and z sliders
+var motionXSlider = document.getElementById("motionXSlider");
+var motionXValue = document.getElementById("motionXValue");
+
+var motionYSlider = document.getElementById("motionYSlider");
+var motionYValue = document.getElementById("motionYValue");
+
+var motionZSlider = document.getElementById("motionZSlider");
+var motionZValue = document.getElementById("motionZValue");
 
 // Some declarations of variables
 // This is the synth used currently, we'll add more here for each input
@@ -96,14 +105,29 @@ const fChord = ["a3", "c4", "f4"];
 const cChord = ["g3", "c4", "e4"];
 const gChord = ["g3", "b3", "d4"];
 
-const chord1 = ["a4", "c5", "e5", "a5"];
-const chord2 = ["f4", "a4", "c5", "f5"];
-const chord3 = ["c5", "e5", "g5", "c6"];
-const chord4 = ["g4", "b4", "d5", "g5"];
-const chord5 = ["a5", "e5", "c5", "a4"];
-const chord6 = ["f5", "c5", "a4", "f4"];
-const chord7 = ["c6", "g5", "e5", "c5"];
-const chord8 = ["g5", "d5", "b4", "g4"];
+const chord1 = ["a4", "c5", "e5"];
+const validNotes = [
+  "e3",
+  "f3",
+  "g3",
+  "a3",
+  "b3",
+  "c4",
+  "d4",
+  "e4",
+  "f4",
+  "g4",
+  "a4",
+  "b4",
+  "c5",
+  "d5",
+  "e5",
+  "f5",
+  "g5",
+  "a5",
+  "b5",
+  "c6"
+];
 
 const humidityLoopSnareNotes1 = [
   [["c4"], ["c4", "c4"]], // first measure
@@ -161,7 +185,7 @@ function setup() {
     tremolo,
     Tone.Master
   );
-  motionSynthX.volume.value = -7;
+  motionSynthX.volume.value = -20;
 
   // Sets up temp synth
   tempSynth = new Tone.PolySynth(6).chain(pingPongDelay, tremolo, Tone.Master);
@@ -280,13 +304,6 @@ function setHumidityLoopValues(measure) {
   humidityLoopSnare.at(3, measure[3]);
 }
 
-function changeArpegio(loop, newArpegio) {
-  loop.at(0, newArpegio[0]);
-  loop.at(1, newArpegio[1]);
-  loop.at(2, newArpegio[2]);
-  loop.at(3, newArpegio[3]);
-}
-
 volumeSlider.oninput = function() {
   volumeOutput.innerHTML = this.value;
   // Can have this change whatever value needs to be tested
@@ -294,7 +311,6 @@ volumeSlider.oninput = function() {
 };
 
 pingPongDelaySlider.oninput = function() {
-  console.log("test");
   pingPongDelayValueOutput.innerHTML = this.value;
   // Can have this change whatever value needs to be tested
   bitCrusher.wet.value = this.value / 2;
@@ -308,6 +324,21 @@ pingPongDelaySlider.oninput = function() {
   }
 };
 
+motionXSlider.oninput = function() {
+  motionXValue.innerHTML = this.value;
+  changeMotionX(this.value);
+};
+
+motionYSlider.oninput = function() {
+  motionYValue.innerHTML = this.value;
+  changeMotionY(this.value);
+};
+
+motionZSlider.oninput = function() {
+  motionZValue.innerHTML = this.value;
+  changeMotionZ(this.value);
+};
+
 // This determines the humidityLoopKick
 function humidityLoopKickFunction(time) {
   setRandomHumidityLoopSnarePattern();
@@ -319,13 +350,6 @@ function setRandomChordPattern() {
   val *= 8;
   val = Math.floor(val);
   setChordPattern(chord + (val + 1));
-}
-
-function setChordPattern(chord) {
-  motionLoopX.at(0, chord[0]);
-  motionLoopX.at(1, chord[1]);
-  motionLoopX.at(2, chord[2]);
-  motionLoopX.at(3, chord[3]);
 }
 
 function tempLoopFunction(time) {
@@ -347,14 +371,6 @@ function lightLoopFunction(time, note) {
 
 function motionLoopXFunction(time, note) {
   motionSynthX.triggerAttackRelease(note, "5hz", time);
-}
-
-function motionLoopYFunction(time, note) {
-  motionSynthY.triggerAttackRelease(note, "5hz", time);
-}
-
-function motionLoopZFunction(time, note) {
-  motionSynthZ.triggerAttackRelease(note, "5hz", time);
 }
 
 function timeLoopFunction(time) {
@@ -427,21 +443,15 @@ function toggleMotionX() {
   motionLoopX.mute = !document.getElementById("muteMotionX").checked;
 }
 
-function toggleMotionY() {
-  motionLoopY.mute = !document.getElementById("muteMotionY").checked;
+function changeHumidity(humidity) {
+  v = roundValue(humidity);
+  humiditySynthSnare.volume.value = v * 20 - 10;
+  humiditySynthKickKick.volume.value = v * 20 - 10;
 }
-
-function toggleMotionZ() {
-  motionLoopZ.mute = !document.getElementById("muteMotionZ").checked;
-}
-
-function changeHumidity(value) {}
 
 // Value is some value between 0 - 1
 function changeTemperature(value) {
-  v = value * 100.0;
-  v = Math.round(v) / 100.0;
-  console.log(v);
+  v = roundValue(value);
   bitCrusher.wet.value = v / 2;
   pingPongDelay.wet.value = v;
 
@@ -453,16 +463,53 @@ function changeTemperature(value) {
   }
 }
 
-function changeLight() {}
+function changeLight(light) {
+  v = roundValue(light);
+  lightSynth.volume.value = v * 20 - 10;
+}
 
-function changeMotion() {}
+function changeMotionX(xValue) {
+  v = roundValue(xValue);
+  // set v to a value between 0 - 19
+  v = Math.round(v * 10 + 9);
+  motionLoopX.at(0, validNotes[v]);
+}
+
+function changeMotionY(yValue) {
+  v = roundValue(yValue);
+  // set v to a value between 0 - 19
+  v = Math.round(v * 10 + 9);
+  motionLoopX.at(1, validNotes[v]);
+}
+function changeMotionZ(zValue) {
+  v = roundValue(zValue);
+  // set v to a value between 0 - 19
+  v = Math.round(v * 10 + 9);
+  motionLoopX.at(2, validNotes[v]);
+}
+
+function roundValue(value) {
+  v = value * 100.0;
+  v = Math.round(v) / 100.0;
+  return v;
+}
 
 //Gets called whenever you receive a message for your subscriptions
-client.onMessageArrived = function (message) {
+client.onMessageArrived = function(message) {
   console.log(message);
   payload = JSON.parse(message.payloadString); // {temp: 0.76}
-  temp = payload.temp;
-  console.log(temp);
+  temp = roundValue(parseFloat(payload.Temp));
+  light = roundValue(parseFloat(payload.Light));
+  humidity = roundValue(parseFloat(payload.Humidity));
+  motionX = roundValue(parseFloat(payload.Motion[0]));
+  motionY = roundValue(parseFloat(payload.Motion[1]));
+  motionZ = roundValue(parseFloat(payload.Motion[2]));
+
   changeTemperature(temp);
+  //changeLight(light);
+  //changeHumidity(humidity);
+  changeMotionX(xValue);
+  changeMotionY(yValue);
+  changeMotionZ(zValue);
   // every other function here
 };

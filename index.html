@@ -2,7 +2,10 @@
 <html>
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.6/Tone.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.js" type="text/javascript"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.js"
+      type="text/javascript"
+    ></script>
     <link rel="stylesheet" href="styles/styles.css" />
     <script async src="./javascript/connection.js"></script>
     <script async src="./javascript/javascript.js"></script>
@@ -98,6 +101,45 @@
           value="0.1"
           class="slider"
           id="pingPongDelaySlider"
+        />
+        <br />
+        <br />
+        Motion X Change:
+        <span id="motionXValue"></span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.1"
+          class="slider"
+          id="motionXSlider"
+        />
+        <br />
+        <br />
+        Motion Y Change:
+        <span id="motionYValue"></span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.1"
+          class="slider"
+          id="motionYSlider"
+        />
+        <br />
+        <br />
+        Motion Z Change:
+        <span id="motionZValue"></span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.1"
+          class="slider"
+          id="motionZSlider"
         />
         <br />
       </div>
