@@ -1,5 +1,9 @@
-var clientId  = 'a:dk8so0:' + Math.random().toString(16).substr(2, 8);
-var client = new Paho.Client("dk8so0.messaging.internetofthings.ibmcloud.com", 1883, clientId);
+var ORG_ID = "dk8so0";
+var API_KEY = "a-dk8so0-ezy9ezvriv";
+var API_AUTH_TOKEN = "7rb_hNq_l58rdDa5ZV";
+
+var clientId  = 'a:' + ORG_ID + ':' + Math.random().toString(16).substr(2, 8);
+var client = new Paho.Client(ORG_ID + ".messaging.internetofthings.ibmcloud.com", 1883, clientId);
 
 //Gets called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
@@ -20,8 +24,8 @@ var publish = function (payload, topic, qos) {
 
 //Connect Options
 var options = {
-  userName: "a-dk8so0-ezy9ezvriv",
-  password: "7rb_hNq_l58rdDa5ZV",
+  userName: API_KEY,
+  password: API_AUTH_TOKEN,
   timeout: 3,
   //Gets Called if the connection has sucessfully been established
   onSuccess: function () {
