@@ -1,10 +1,10 @@
 // Scaled values recieved from the RPI
-const tempVal = 0.5;
-const humidityVal = 0.5;
-const lightVal = 0.5;
-const motionX = 0.5;
-const motionY = 0.5;
-const motionZ = 0.5;
+var tempVal = 0.5;
+var humidityVal = 0.5;
+var lightVal = 0.5;
+var motionX = 0.5;
+var motionY = 0.5;
+var motionZ = 0.5;
 
 var loopLocation = 0;
 
@@ -100,13 +100,13 @@ lightLoopNotes = [
   ["b" + 1, "c" + 2]
 ];
 
-const aChord = ["a3", "c4", "e4"];
-const fChord = ["a3", "c4", "f4"];
-const cChord = ["g3", "c4", "e4"];
-const gChord = ["g3", "b3", "d4"];
+var aChord = ["a3", "c4", "e4"];
+var fChord = ["a3", "c4", "f4"];
+var cChord = ["g3", "c4", "e4"];
+var gChord = ["g3", "b3", "d4"];
 
-const chord1 = ["a4", "c5", "e5"];
-const validNotes = [
+var chord1 = ["a4", "c5", "e5"];
+var validNotes = [
   "e3",
   "f3",
   "g3",
@@ -129,25 +129,25 @@ const validNotes = [
   "c6"
 ];
 
-const humidityLoopSnareNotes1 = [
+var humidityLoopSnareNotes1 = [
   [["c4"], ["c4", "c4"]], // first measure
   [["c4"], ["c4", "c4"]],
   [["c4"], ["c4"]],
   [["c4"], ["c4"]]
 ];
-const humidityLoopSnareNotes2 = [
+var humidityLoopSnareNotes2 = [
   [["c4", "c4"], ["c4", "c4"]], // second measure
   [["c4"], ["c4"]],
   [["c4"], ["c4", "c4"]],
   [["c4", "c4"], ["c4"]]
 ];
-const humidityLoopSnareNotes3 = [
+var humidityLoopSnareNotes3 = [
   [["c4", "c4"], ["c4"]], // third measure
   [["c4", "c4"], ["c4"]],
   [["c4"], ["c4", "c4"]],
   [["c4"], ["c4", "c4"]]
 ];
-const humidityLoopSnareNotes4 = [
+var humidityLoopSnareNotes4 = [
   [["c4", "c4"], ["c4", "c4"]], // fourth measure
   [["c4", "c4"], ["c4"]],
   [null, [null, "c4"]],
@@ -223,12 +223,15 @@ function setup() {
     "8n"
   ).start();
 
-  // A loop that simply counts from iteratesa global constant from 0 - 3 so we can know what measure we're on.
+  // A loop that simply counts from iteratesa global varant from 0 - 3 so we can know what measure we're on.
   // It is 0 - 3 because the song is in 4/4 time
   timeLoop = new Tone.Loop(timeLoopFunction, "1n").start();
 
   // Sets the start ocatave for the light notes
   setlightLoopOctave(2);
+
+  // connect to IBM cloud
+  client.connect(options);
 }
 
 function makeFunky() {
@@ -508,8 +511,8 @@ client.onMessageArrived = function(message) {
   changeTemperature(temp);
   //changeLight(light);
   //changeHumidity(humidity);
-  changeMotionX(xValue);
-  changeMotionY(yValue);
-  changeMotionZ(zValue);
+  changeMotionX(motionX);
+  changeMotionY(motionY);
+  changeMotionZ(motionZ);
   // every other function here
 };

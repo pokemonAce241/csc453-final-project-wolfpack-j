@@ -37,5 +37,3 @@ var options = {
     console.log("Connection failed: " + message.errorMessage);
   }
 };
-
-client.connect(options);
