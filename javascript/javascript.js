@@ -448,47 +448,56 @@ function toggleMotionX() {
 
 function changeHumidity(humidity) {
   v = roundValue(humidity);
-  humiditySynthSnare.volume.value = v * 20 - 10;
-  humiditySynthKickKick.volume.value = v * 20 - 10;
+  if (humiditySynthKick && humiditySynthSnare) {
+    humiditySynthSnare.volume.value = v * 30 - 30;
+    humiditySynthKick.volume.value = v * 30 - 30;
+  } else {
+    console.log("Kick Synth or ");
+  }
 }
 
 // Value is some value between 0 - 1
 function changeTemperature(value) {
-  v = roundValue(value);
-  bitCrusher.wet.value = v / 2;
-  pingPongDelay.wet.value = v;
+  if (tempLoop.mute) {
+    // scale value between 0 and 0.3
+    v = roundValue(value);
+    v /= 2;
+    bitCrusher.wet.value = v / 2;
+    pingPongDelay.wet.value = v;
 
-  tremolo.frequency.value = v * 20;
-  if (v * 20 > 1) {
-    tremolo.wet.value = 1;
-  } else {
-    tremolo.wet.value = 0;
+    tremolo.frequency.value = v * 20;
+    if (v * 20 > 1) {
+      tremolo.wet.value = 1;
+    } else {
+      tremolo.wet.value = 0;
+    }
   }
 }
 
 function changeLight(light) {
   v = roundValue(light);
-  lightSynth.volume.value = v * 20 - 10;
+  console.log(Math.floor(v * 5) + 1);
+  setlightLoopOctave(Math.floor(v * 5) + 1);
 }
 
 function changeMotionX(xValue) {
   v = roundValue(xValue);
   // set v to a value between 0 - 19
-  v = Math.round(v * 10 + 9);
-  motionLoopX.at(0, validNotes[v]);
+  v = Math.round(v * 700 + 100);
+  motionLoopX.at(0, v);
 }
 
 function changeMotionY(yValue) {
   v = roundValue(yValue);
   // set v to a value between 0 - 19
-  v = Math.round(v * 10 + 9);
-  motionLoopX.at(1, validNotes[v]);
+  v = Math.round(v * 700 + 100);
+  motionLoopX.at(1, v);
 }
 function changeMotionZ(zValue) {
   v = roundValue(zValue);
   // set v to a value between 0 - 19
-  v = Math.round(v * 10 + 9);
-  motionLoopX.at(2, validNotes[v]);
+  v = Math.round(v * 700 + 100);
+  motionLoopX.at(2, v);
 }
 
 function roundValue(value) {
@@ -508,9 +517,11 @@ client.onMessageArrived = function(message) {
   motionY = roundValue(parseFloat(payload.Motion[1]));
   motionZ = roundValue(parseFloat(payload.Motion[2]));
 
+  console.log(payload);
+
   changeTemperature(temp);
-  //changeLight(light);
-  //changeHumidity(humidity);
+  changeLight(light);
+  changeHumidity(humidity);
   changeMotionX(motionX);
   changeMotionY(motionY);
   changeMotionZ(motionZ);
