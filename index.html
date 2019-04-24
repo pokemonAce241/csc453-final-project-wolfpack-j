@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles/styles.css" />
     <script async src="./javascript/connection.js"></script>
     <script async src="./javascript/javascript.js"></script>
-    <title>My webpage!</title>
+    <title>IoT Musicalizer</title>
   </head>
   <body>
     <h1>IoT Musicalizer</h1>
@@ -21,11 +21,6 @@
     <br />
     <br />
     <div class="slidecontainer">
-      <label class="container"
-        >Make Funky
-        <input type="checkbox" id="makeFunky" onclick="makeFunky()" />
-        <span class="checkmark"></span>
-      </label>
       Volume:
       <span id="volumeValue"></span>
       <input
@@ -42,7 +37,6 @@
     <br />
     <hr size="10" width="90%" align="center" color="black" />
     <br />
-    <br/ >
     <div>
       <label class="container">
         Toggle Temperature
@@ -52,29 +46,42 @@
 
       <label class="container">
         Toggle Light
+        <input type="checkbox" id="muteLight" onclick="toggleLight()" />
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="container">
+        Toggle Humidity
+        <input type="checkbox" id="muteHumidity" onclick="toggleHumidity()" />
+        <span class="checkmark"></span>
+      </label>
+      <br />
+      <br <hr size="10" width="90%" align="center" color="black" />
+      <br />
+      <label class="container"
+        >Toggle Acceleration-X
         <input
           type="checkbox"
-          checked="checked"
-          id="muteLight"
-          onclick="toggleLight()"
+          id="muteaccelerationX"
+          onclick="toggleAccelerationX()"
         />
         <span class="checkmark"></span>
       </label>
-      <label class="container">
-        Toggle Humidity Kick
+      <label class="container"
+        >Toggle Acceleration-Y
         <input
           type="checkbox"
-          id="muteHumidityKick"
-          onclick="toggleHumidityKick()"
+          id="muteaccelerationY"
+          onclick="toggleAccelerationY()"
         />
         <span class="checkmark"></span>
       </label>
-      <label class="container">
-        Toggle Humidity Snare
+      <label class="container"
+        >Toggle Acceleration-Z
         <input
           type="checkbox"
-          id="muteHumiditySnare"
-          onclick="toggleHumiditySnare()"
+          id="muteaccelerationZ"
+          onclick="toggleAccelerationZ()"
         />
         <span class="checkmark"></span>
       </label>
@@ -83,65 +90,142 @@
       <br />
       <label class="container"
         >Toggle Motion-X
-        <input type="checkbox" id="muteMotionX" onclick="toggleMotionX()" />
+        <input type="checkbox" id="motionXCheck" onclick="toggleMotionX()" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container"
+        >Toggle Motion-Y
+        <input type="checkbox" id="motionYCheck" onclick="toggleMotionY()" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container"
+        >Toggle Motion-Z
+        <input type="checkbox" id="motionZCheck" onclick="toggleMotionZ()" />
         <span class="checkmark"></span>
       </label>
       <br />
       <br />
+      <hr size="10" width="90%" align="center" color="black" />
       <br />
-      <div>
-        <br />
-        Temperature Change:
-        <span id="pingPongDelayValue"></span>
+      <!-- <div if="false">
+        Humidity Value:
+        <span id="humidityValue"></span>
         <input
           type="range"
           min="0"
           max="1"
-          step="0.1"
-          value="0.1"
+          step="0.01"
+          value="0"
           class="slider"
-          id="pingPongDelaySlider"
+          id="humiditySlider"
         />
         <br />
         <br />
-        Motion X Change:
-        <span id="motionXValue"></span>
+        Light Value:
+        <span id="lightValue"></span>
         <input
           type="range"
           min="0"
           max="1"
-          step="0.1"
-          value="0.1"
+          step="0.01"
+          value="0"
           class="slider"
-          id="motionXSlider"
+          id="lightSlider"
         />
         <br />
         <br />
-        Motion Y Change:
-        <span id="motionYValue"></span>
+        Temperature Value:
+        <span id="tempValue"></span>
         <input
           type="range"
           min="0"
           max="1"
-          step="0.1"
-          value="0.1"
+          step="0.01"
+          value="0"
           class="slider"
-          id="motionYSlider"
+          id="tempSlider"
         />
         <br />
         <br />
-        Motion Z Change:
-        <span id="motionZValue"></span>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          value="0.1"
-          class="slider"
-          id="motionZSlider"
-        />
-        <br />
+        <div>
+          Acceleration X:
+          <span id="accelerationXValue"></span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            class="slider"
+            id="accelerationXSlider"
+          />
+          <br />
+          <br />
+          Acceleration Y:
+          <span id="accelerationYValue"></span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            class="slider"
+            id="accelerationYSlider"
+          />
+          <br />
+          <br />
+          Acceleration Z:
+          <span id="accelerationZValue"></span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            class="slider"
+            id="accelerationZSlider"
+          />
+          <br />
+          <br />
+          Motion X:
+          <span id="motionXValue"></span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            class="slider"
+            id="motionXSlider"
+          />
+          <br />
+          <br />
+          Motion Y:
+          <span id="motionYValue"></span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            class="slider"
+            id="motionYSlider"
+          />
+          <br />
+          <br />
+          Motion Z:
+          <span id="motionZValue"></span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            class="slider"
+            id="motionZSlider"
+          />
+          <br />
+        </div> -->
       </div>
     </div>
   </body>

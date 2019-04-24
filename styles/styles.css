@@ -2,7 +2,7 @@ body {
   text-align: center;
   color: white;
   background-color: black;
-  background-image: url("music.jpg");
+  background-image: url("backgroundImage1.jpg");
   background-size: 100%;
 }
 
@@ -45,23 +45,18 @@ h1 {
 }
 
 .button1 {
-  background-color: blue;
+  background-color: darkslateblue;
 }
 .button1:hover {
-  background-color: lightblue;
-}
-.button2 {
-  background-color: green;
-}
-.button2:hover {
-  background-color: lightgreen;
-}
-.button3 {
-  background-color: grey;
-}
-.button3:hover {
   background-color: lightgrey;
 }
+.button2 {
+  background-color: darkmagenta;
+}
+.button2:hover {
+  background-color: lightgrey;
+}
+
 
 .slidecontainer {
   width: 100%;
@@ -164,3 +159,4 @@ h1 {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+z

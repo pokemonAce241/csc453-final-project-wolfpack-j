@@ -46,5 +46,5 @@ var options = {
   onFailure: function(message) {
     console.log("Connection failed: " + message.errorMessage);
   },
-  useSSL: true,
+  useSSL: true
 };
