@@ -11,7 +11,7 @@ var clientId =
     .substr(2, 8);
 var client = new Paho.Client(
   ORG_ID + ".messaging.internetofthings.ibmcloud.com",
-  1883,
+  8883,
   clientId
 );
 
@@ -45,5 +45,6 @@ var options = {
   //Gets Called if the connection could not be established
   onFailure: function(message) {
     console.log("Connection failed: " + message.errorMessage);
-  }
+  },
+  useSSL: true,
 };
