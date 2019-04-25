@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="styles/styles.css" />
     <script async src="./javascript/connection.js"></script>
     <script async src="./javascript/javascript.js"></script>
-    <title>IoT Musicalizer</title>
+    <title>IoT Auralizer</title>
   </head>
   <body>
-    <h1>IoT Musicalizer</h1>
+    <h1>IoT Auralizer</h1>
     <div>
       <button class="button button0" onclick="pause()">Pause</button>
       <button class="button button1" onclick="play()">Play</button>
@@ -52,7 +52,7 @@
 
       <label class="container">
         Toggle Humidity
-        <input type="checkbox" id="muteHumidity" onclick="toggleHumidity()" />
+        <input type="checkbox" id="muteHumidity" />
         <span class="checkmark"></span>
       </label>
       <br />
@@ -60,54 +60,42 @@
       <br />
       <label class="container"
         >Toggle Acceleration-X
-        <input
-          type="checkbox"
-          id="muteaccelerationX"
-          onclick="toggleAccelerationX()"
-        />
+        <input type="checkbox" id="muteaccelerationX" />
         <span class="checkmark"></span>
       </label>
       <label class="container"
         >Toggle Acceleration-Y
-        <input
-          type="checkbox"
-          id="muteaccelerationY"
-          onclick="toggleAccelerationY()"
-        />
+        <input type="checkbox" id="muteaccelerationY" />
         <span class="checkmark"></span>
       </label>
       <label class="container"
         >Toggle Acceleration-Z
-        <input
-          type="checkbox"
-          id="muteaccelerationZ"
-          onclick="toggleAccelerationZ()"
-        />
+        <input type="checkbox" id="muteaccelerationZ" />
         <span class="checkmark"></span>
       </label>
       <br />
       <br />
       <br />
-      <label class="container"
+      <!-- <label class="container"
         >Toggle Motion-X
-        <input type="checkbox" id="motionXCheck" onclick="toggleMotionX()" />
+        <input type="checkbox" id="motionXCheck" />
         <span class="checkmark"></span>
       </label>
       <label class="container"
         >Toggle Motion-Y
-        <input type="checkbox" id="motionYCheck" onclick="toggleMotionY()" />
+        <input type="checkbox" id="motionYCheck" />
         <span class="checkmark"></span>
       </label>
       <label class="container"
         >Toggle Motion-Z
-        <input type="checkbox" id="motionZCheck" onclick="toggleMotionZ()" />
+        <input type="checkbox" id="motionZCheck" />
         <span class="checkmark"></span>
-      </label>
+      </label> -->
       <br />
       <br />
       <hr size="10" width="90%" align="center" color="black" />
       <br />
-      <!-- <div if="false">
+      <div if="false">
         Humidity Value:
         <span id="humidityValue"></span>
         <input
@@ -187,7 +175,7 @@
           />
           <br />
           <br />
-          Motion X:
+          <!-- Motion X:
           <span id="motionXValue"></span>
           <input
             type="range"
@@ -223,9 +211,9 @@
             value="0"
             class="slider"
             id="motionZSlider"
-          />
+          /> -->
           <br />
-        </div> -->
+        </div>
       </div>
     </div>
   </body>
