@@ -31,7 +31,7 @@ humidity_min = 0
 humidity_max = 100
 
 temp_min = 5
-temp_max = 40
+temp_max = 27
 
 
 
