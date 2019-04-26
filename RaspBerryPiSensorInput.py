@@ -30,8 +30,8 @@ gyro_max = 251
 humidity_min = 0
 humidity_max = 100
 
-temp_min = 0
-temp_max = 48
+temp_min = 5
+temp_max = 40
 
 
 
