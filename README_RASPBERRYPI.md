@@ -1,3 +1,5 @@
+# Running the Python data collection code
+
 The first key point to running the Raspberry Pi sensor code is to have the proper libraries
 installed in the Pi.
 
@@ -22,3 +24,6 @@ storage location you prefer. To run the code you can either run it directly from
 in a programming application made for python like Thonny.
 
 To run the program from the terminal use `python3 RaspBerryPiSensorInput.py`
+
+# Migrating IBM Clouds
+If you need to migrate to a different IBM cloud, then simply change the "org", "id", "auth-key", and "auth-token" properties of the options dictionary that is passed to the ibmiotf library.

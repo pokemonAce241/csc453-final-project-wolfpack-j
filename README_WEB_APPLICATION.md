@@ -8,3 +8,7 @@
 Alternatively, if you don't want to serve the files with a static web server, then you can open index.html directly into a web browser, however, it's not guaranteed that everything will function correctly.
 
 2. After you have chosen how you want to serve the web app files, then simply navigate to the appropriate URL in your browser and you will see the web app.  Click the 'Play' button to connect to the IBM cloud and start receiving values.  Now you can start toggling sounds on and off.
+
+
+# Migrating IBM Clouds
+If you need to migrate to a different IBM cloud, then simply change the ORG_ID, API_KEY, and API_AUTH_TOKEN constants at the top of the web-app/javascript/connection.js file.
