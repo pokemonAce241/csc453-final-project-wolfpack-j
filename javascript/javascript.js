@@ -46,8 +46,6 @@ var snareCheck = document.getElementById("muteSnare");
 // ======================================================================================================
 // Declarations of any effects needed to modulate a synth
 //
-var tempEffect = new Tone.BitCrusher(4);
-var humidityEffect = new Tone.PitchShift(7);
 var lightEffect = new Tone.Vibrato(10, 1);
 var compressor = new Tone.Compressor().toMaster();
 
@@ -76,14 +74,14 @@ let kickVolumeScale = 0;
 let snareVolumeScale = -15;
 let accelerationXVolumeScale = 0;
 let accelerationYVolumeScale = 15;
-let accelerationZVolumeScale = 0;
+let accelerationZVolumeScale = 10;
 // let motionXScale = 0;
 // let motionYScale = 0;
 // let motionZScale = 0;
 let volumeScale = -15;
 
 // the length of a note for each synth
-let accelerationLengthNote = "+0.2";
+let accelerationLengthNote = "+0.5";
 
 // Declaration of all the synths
 // Synth for the kick drum, changed by humidity
@@ -98,6 +96,8 @@ let accelerationXSynth;
 let accelerationYSynth;
 // Synth, changed by the acceleration in the Z direction
 let accelerationZSynth;
+// Synth, changed by the temperature
+let tempSynth;
 // // Synth, changed by the motion in the X direction
 // let motionXSynth;
 // // Synth, changed by the motion in the Y direction
@@ -158,7 +158,6 @@ function setup() {
 
   // Set up a Sequence to play the snare
   toggleLight();
-  toggleTemp();
 
   // initializes everything with the loweset possible value
   changeLight(0);
@@ -171,7 +170,7 @@ function setup() {
   // changeMotionZ(0);
 
   Tone.Master.volume.value = volumeScale;
-  Tone.Master.chain(tempEffect, lightEffect);
+  Tone.Master.chain(lightEffect);
   Tone.Transport.bpm.value = 140;
   // connect to IBM cloud
   client.connect(options);
@@ -181,6 +180,7 @@ function initSynths() {
   initAccelerationXSynth();
   initAccelerationYSynth();
   initAccelerationZSynth();
+  initTempSynth();
   // // Synth, changed by the motion in the X direction
   // motionXSynth = new Tone.Synth().toMaster().sync();
   // motionXSynth.volume.value = motionXScale;
@@ -231,7 +231,7 @@ function initAccelerationXSynth() {
   accelerationXSynth.volume.value = accelerationXVolumeScale;
   accelerationXSynth.chain(lowPassFilter, highPassFilter, Tone.Master);
   accelerationXSynth.portamento = 0.2;
-  this.accelerationLengthNote = "+0.2";
+  this.accelerationLengthNote = "+0.5";
 }
 
 function initAccelerationYSynth() {
@@ -303,28 +303,66 @@ function initAccelerationZSynth() {
     gain: 0
   });
   // Synth, changed by the acceleration in the X direction
-  accelerationZSynth = new Tone.Synth({
-    oscillator: {
-      type: "sawtooth",
-      frequency: 440,
-      detune: 0,
-      phase: 3,
-      partials: [1, 0.5, 0.3, 0.01],
-      partialCount: 4
-    },
-    envelope: {
-      attack: 0.2,
-      attackCurve: "bounce",
-      decay: 0.3,
-      decayCurve: "linear",
-      sustain: 0.9,
-      release: 0.05,
-      releaseCurve: "exponential"
+  // accelerationZSynth = new Tone.Synth({
+  //   oscillator: {
+  //     type: "sawtooth",
+  //     frequency: 440,
+  //     detune: 0,
+  //     phase: 3,
+  //     partials: [1, 0.5, 0.3, 0.01],
+  //     partialCount: 4
+  //   },
+  //   envelope: {
+  //     attack: 0.2,
+  //     attackCurve: "bounce",
+  //     decay: 0.3,
+  //     decayCurve: "linear",
+  //     sustain: 0.9,
+  //     release: 0.05,
+  //     releaseCurve: "exponential"
+  //   }
+  // });
+  accelerationZSynth = new Tone.FMSynth({
+    harmonicity  : 3 ,
+    modulationIndex  : 10 ,
+    detune  : 0 ,
+    oscillator  : {
+      type  : 'sine'
+    }  ,
+    envelope  : {
+      attack  : 0.01 ,
+      decay  : 0.01 ,
+      sustain  : 1 ,
+      release  : 0.5
+    }  ,
+    modulation  : {
+      type  : 'square'
+    }  ,
+    modulationEnvelope  : {
+      attack  : 0.5 ,
+      decay  : 0 ,
+      sustain  : 1 ,
+      release  : 0.5
     }
   });
   accelerationZSynth.volume.value = accelerationZVolumeScale;
   accelerationZSynth.chain(lowPassFilter, highPassFilter, Tone.Master);
   accelerationZSynth.portamento = 0.2;
+}
+
+function initTempSynth() {
+  tempSynth = new Tone.NoiseSynth({
+    noise  : {
+    type  : 'brown'
+    }  ,
+    envelope  : {
+    attack  : 0.005 ,
+    decay  : 0.1 ,
+    sustain  : 0.5
+    }
+  });
+  tempSynth.volume.value = 0;
+  tempSynth.toMaster();
 }
 
 // ======================================================================================================
@@ -419,14 +457,6 @@ function mute() {
   }
 }
 
-function toggleTemp() {
-  if (!tempCheck.checked) {
-    tempEffect.wet.value = 0;
-  } else {
-    tempEffect.wet.value = this.tempWetValue;
-  }
-}
-
 function toggleLight() {
   if (!lightCheck.checked) {
     lightEffect.wet.value = 0;
@@ -482,16 +512,15 @@ function changeHumidity(humidity) {
 
 // Change frequency of the tempSynth
 function changeTemp(temp) {
-  if (hasStarted) {
-    v = roundValue(temp);
-    if (tempCheck.checked) {
-      this.tempEffect.wet.value = v;
-      this.tempWetValue = v;
-    } else {
-      this.tempEffect.wet.value = 0;
-    }
-    toggleTemp();
-    return Math.round(v * 100);
+  const LOWER_VOLUME_LEVEL = 0;
+  const UPPER_VOLUME_LEVEL = 20;
+  const VOL_RANGE = UPPER_VOLUME_LEVEL - LOWER_VOLUME_LEVEL;
+  if (hasStarted && tempCheck.checked) {
+    tempSynth.volume.value = Math.round(temp * (VOL_RANGE) + LOWER_VOLUME_LEVEL);
+    tempSynth.triggerAttack();
+  } else {
+    tempSynth.triggerRelease();
+    return 0;
   }
 }
 
@@ -517,11 +546,13 @@ function changeaccelerationX(xValue) {
     v = v * 2500 + 196;
     this.accelerationXStartNote = Math.round(v);
     accelerationXSynth.frequency.value = Math.round(v);
-    accelerationXSynth.triggerAttack(v);
-    accelerationXSynth.triggerRelease(accelerationLengthNote);
+    accelerationXSynth.triggerAttack(v, "+0.2");
+    // accelerationXSynth.triggerRelease(accelerationLengthNote);
     return Math.round(v);
+  } else {
+    accelerationXSynth.triggerRelease();
+    return 0;
   }
-  return 0;
 }
 
 // Change frequency of the accelerationYSynth
@@ -531,11 +562,13 @@ function changeaccelerationY(yValue) {
     v = v * 1040 + 131;
     accelerationYStartNote = Math.round(v);
     accelerationYSynth.frequency.value = Math.round(v);
-    accelerationYSynth.triggerAttack(v);
-    accelerationYSynth.triggerRelease(accelerationLengthNote);
+    accelerationYSynth.triggerAttack(v, "+0.1");
+    // accelerationYSynth.triggerRelease(accelerationLengthNote);
     return Math.round(v);
+  } else {
+    accelerationYSynth.triggerRelease();
+    return 0;
   }
-  return 0;
 }
 
 // Change frequency of the accelerationZSynth
@@ -546,10 +579,12 @@ function changeaccelerationZ(zValue) {
     accelerationZStartNote = Math.round(v);
     accelerationZSynth.frequency.value = Math.round(v);
     accelerationZSynth.triggerAttack(v);
-    accelerationZSynth.triggerRelease(accelerationLengthNote);
+    // accelerationZSynth.triggerRelease(accelerationLengthNote);
     return Math.round(v);
+  } else {
+    accelerationZSynth.triggerRelease();
+    return 0;
   }
-  return 0;
 }
 
 // function changeMotionX(xValue) {
@@ -606,6 +641,7 @@ function randomInt(min, max) {
 
 //Gets called whenever you receive a message for your subscriptions
 client.onMessageArrived = function(message) {
+  console.log('Message received');
   payload = JSON.parse(message.payloadString); // {temp: 0.76}
   temp = roundValue(parseFloat(payload.Temp));
   light = roundValue(parseFloat(payload.Light));
