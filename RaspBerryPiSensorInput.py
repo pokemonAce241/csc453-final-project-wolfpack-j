@@ -30,8 +30,8 @@ gyro_max = 251
 humidity_min = 0
 humidity_max = 100
 
-temp_min = 0
-temp_max = 48
+temp_min = 5
+temp_max = 30
 
 
 
@@ -116,8 +116,7 @@ def loop():
                   'Light' : round(ldr_val,2),
                   'Temp' : round(t,2),
                   'Humidity' : round(h,2)}
-        print(t)
-#        print(myData)
+        print(myData)
         client.publishEvent("RaspberryPi", "rpi", "musicSensorData", "json", myData, 2)
         time.sleep(0.01)
 
